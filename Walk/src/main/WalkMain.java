@@ -46,6 +46,8 @@ public class WalkMain {
 					a1.lotoAction();
 				} else if (userRow == WalkConstants.PRISONROW && userCol == WalkConstants.PRISONCOL) {
 					a1.prisonAction();
+				} else {
+					a1.randomAction();
 				}
 			} catch (Exception ex) {
 				System.out.println("例外が発生しました");

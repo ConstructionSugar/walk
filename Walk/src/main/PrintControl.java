@@ -70,6 +70,9 @@ public class PrintControl {
 				case WalkConstants.PRISON:
 					System.out.println(WalkConstants.FRAME2 + (i + 1) + WalkConstants.COLON + WalkConstants.getPrisonCmd(i));
 					break;
+				case WalkConstants.RANDOMEVENTMSG:
+					System.out.println(WalkConstants.FRAME2 + (i + 1) + WalkConstants.COLON + WalkConstants.getRandomCmd(i));
+					break;
 			}
 		}
 		System.out.println(WalkConstants.FRAME1);
@@ -124,8 +127,8 @@ public class PrintControl {
 	}
 
 //	コマンド選択結果を表示するメソッド
-	void printChoiceCmd(String ChoiceCmd) {
-		System.out.println(ChoiceCmd);
+	void printFreeMsg(String freeMsg) {
+		System.out.println(freeMsg);
 		System.out.println();
 	}
 

@@ -50,7 +50,12 @@ public class WalkConstants {
 
 	private static final String CMD21 = "刑期を務める";
 	private static final String CMD22 = "脱獄する";
+
 	public static final String CMD23 = ">:";
+
+	private static final String CMD24 = "体力の回復";
+	private static final String CMD25 = "幸福度のUP";
+	private static final String CMD26 = "所持金のUP";
 
 //	コマンド:散歩開始
 	private static final String[] STARTCHECKCMD = { CMD1,CMD2 };
@@ -87,6 +92,10 @@ public class WalkConstants {
 //	コマンド:共通（支払い）
 	private static final String[] PAYMENTCMD = { CMD15,CMD16 };
 	public static String getPaymentCmd(int index) { return PAYMENTCMD[index]; }
+
+//	コマンド:ランダム発生イベント
+	private static final String[] RADDOMCMD = { CMD24,CMD25,CMD26 };
+	public static String getRandomCmd(int index) { return RADDOMCMD[index]; }
 
 //	コマンド:枠線
 	public static final String FRAME1 = "################################################################################";
@@ -137,6 +146,8 @@ public class WalkConstants {
 	public static final String CAFESTAFFMSG = "(カフェ店員) ＞＞ ちっ！！ひやかしかよ！";
 	public static final String ESCAPETRUEMSG = "支払いせずに逃げました！！成功！！";
 	public static final String ESCAPEFALSEMSG = "支払いせずに逃げました！！..失敗..刑務所へ。。。";
+	public static final String RANDOMEVENTMSG = "イベント発生！散歩最高！！";
+	public static final String HPLOST = "転んだ...(+_+)...";
 
 	private static final String LOTORESULTMSG0 = "残念！ハズレ!";
 	private static final String LOTORESULTMSG1 = "1等！当選金は ：";

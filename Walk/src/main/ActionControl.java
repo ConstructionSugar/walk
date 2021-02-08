@@ -13,13 +13,13 @@ public class ActionControl {
 	PrintControl p1 = new PrintControl();
 
 	boolean errFlg = false;
-//	Scanner sc = new java.util.Scanner(System.in) ;
+//	Scanner sc = new Scanner(System.in) ;
 
 //	オープニングの処理をするメソッド
 	void openingAction() {
 		if (!errFlg) { p1.printManual(); }
 		p1.printCmdMain(WalkConstants.STARTCHECKMSG,"2");
-		Scanner sc = new java.util.Scanner(System.in) ;
+		Scanner sc = new Scanner(System.in) ;
 		try {
 			int startCkCmd = sc.nextInt();
 			System.out.println(startCkCmd);
@@ -35,7 +35,7 @@ public class ActionControl {
 		switch (startCkCmd) {
 			case 1:
 				p1.printUserNameIn();
-				Scanner sc = new java.util.Scanner(System.in) ;
+				Scanner sc = new Scanner(System.in) ;
 				try {
 					String name = sc.next();
 					u1.setName(name) ;
@@ -81,13 +81,14 @@ public class ActionControl {
 		int recoverHp = hpUpDownUser(-1);
 		hpCheckUser();
 		if (WalkMain.userRow != WalkConstants.HOMEROW && WalkMain.userCol != WalkConstants.HOMECOL) {
-			p1.printChoiceCmd(u1.getName() + WalkConstants.MOVEMSG);
+			p1.printFreeMsg(u1.getName() + WalkConstants.MOVEMSG);
 			p1.printHpDown(recoverHp);
 		}
 
 		if (WalkMain.wall[exuserRow][exuserCol]) {
 			p1.printDeadEnd();
 			recoverHp = hpUpDownUser(-2);
+			hpCheckUser();
 			p1.printHpDown(recoverHp);
 			return;
 		}
@@ -103,10 +104,49 @@ public class ActionControl {
 		p1.keyboardCmd();
 	}
 
+//	ランダムイベントを処理するメソッド
+	void randomAction() {
+		Random rand = new Random();
+		int num = rand.nextInt(10);
+		if (num == 1) {
+			p1.printCmdMain(WalkConstants.RANDOMEVENTMSG,"3");
+			Scanner sc = new Scanner(System.in) ;
+			try {
+				int randomCmd = sc.nextInt();
+				switch (randomCmd) {
+				case 1:
+					int recoverHp = hpUpDownUser(20);
+					p1.printHpUp(recoverHp);
+					break;
+				case 2:
+					int recoverHappiness = happinessUpDownUser(20);
+					p1.printHappinessUp(recoverHappiness);
+					break;
+				case 3:
+					moneyUpDownUser(2000);
+					p1.printMoneyUp(2000);
+					break;
+				default:
+					inputErr();
+					randomAction();
+					break;
+				}
+			} catch (InputMismatchException ex) {
+				inputErr();
+				randomAction();
+			}
+		} else if (num == 4) {
+			System.out.println(WalkConstants.HPLOST);
+			int recoverHp = hpUpDownUser(-5);
+			hpCheckUser();
+			p1.printHpDown(recoverHp);
+		}
+	}
+
 //	帰宅時(家)の処理メソッド
 	void goHomeAction() {
 		p1.printCmdMain(WalkConstants.HOME,"2");
-		Scanner sc = new java.util.Scanner(System.in) ;
+		Scanner sc = new Scanner(System.in) ;
 		try {
 			int homeCmd = sc.nextInt();
 			switch (homeCmd) {
@@ -133,7 +173,7 @@ public class ActionControl {
 	void parkAction() {
 		p1.printCmdMain(WalkConstants.PARK,"5");
 		int parkCmd;
-		Scanner sc = new java.util.Scanner(System.in) ;
+		Scanner sc = new Scanner(System.in) ;
 		try {
 			int parkInCmd = sc.nextInt();
 			if (parkInCmd == 5) {
@@ -146,7 +186,7 @@ public class ActionControl {
 				inputErr();
 				parkAction();
 			} else {
-				p1.printChoiceCmd(WalkConstants.getParkCmd(parkCmd - 1));
+				p1.printFreeMsg(WalkConstants.getParkCmd(parkCmd - 1));
 				WalkMain.userRow--;
 			}
 			switch (parkCmd) {
@@ -170,7 +210,7 @@ public class ActionControl {
 	void cafeAction() {
 		p1.printCmdMain(WalkConstants.CAFE,"3");
 		int cafeCmd;
-		Scanner sc = new java.util.Scanner(System.in) ;
+		Scanner sc = new Scanner(System.in) ;
 		try {
 			int cafeInCmd = sc.nextInt();
 			Random rand = new Random();
@@ -183,7 +223,7 @@ public class ActionControl {
 				inputErr();
 				cafeAction();
 			} else {
-				p1.printChoiceCmd(WalkConstants.getCafeCmd(cafeCmd - 1));
+				p1.printFreeMsg(WalkConstants.getCafeCmd(cafeCmd - 1));
 				WalkMain.userCol--;
 			}
 			if (cafeCmd == 1) { cafeOrderAction(); }
@@ -196,26 +236,26 @@ public class ActionControl {
 //	カフェ(店)注文時の処理をするメソッド
 	void cafeOrderAction() {
 		p1.printCafeOrder();
-		Scanner sc = new java.util.Scanner(System.in) ;
+		Scanner sc = new Scanner(System.in) ;
 		try {
 			int cafeOrderInCmd = sc.nextInt();
 			switch (cafeOrderInCmd) {
 				case 1:
-					p1.printChoiceCmd(WalkConstants.getCafeOrderCmd(cafeOrderInCmd - 1));
+					p1.printFreeMsg(WalkConstants.getCafeOrderCmd(cafeOrderInCmd - 1));
 					System.out.println(cafeOrderInCmd);
 					if (u1.getMoney() >= 500) {
 						paymentAction(20,-500,30);
 					} else {
-						p1.printChoiceCmd(WalkConstants.MONEYLOSEMSG);
+						p1.printFreeMsg(WalkConstants.MONEYLOSEMSG);
 					}
 					break;
 				case 2:
-					p1.printChoiceCmd(WalkConstants.getCafeOrderCmd(cafeOrderInCmd - 1));
+					p1.printFreeMsg(WalkConstants.getCafeOrderCmd(cafeOrderInCmd - 1));
 					System.out.println(cafeOrderInCmd);
 					if (u1.getMoney() >= 1000) {
 						paymentAction(50,-1000,50);
 					} else {
-						p1.printChoiceCmd(WalkConstants.MONEYLOSEMSG);
+						p1.printFreeMsg(WalkConstants.MONEYLOSEMSG);
 					}
 					break;
 				case 3:
@@ -237,14 +277,14 @@ public class ActionControl {
 //	支払いの処理をするメソッド
 	void paymentAction(int hp,int money, int happiness) {
 		p1.printPayment();
-		Scanner sc = new java.util.Scanner(System.in) ;
+		Scanner sc = new Scanner(System.in) ;
 		try {
 			int paymentInCmd = sc.nextInt();
 			int recoverHappiness;
 			Random rand = new Random();
 			switch (paymentInCmd) {
 				case 1:
-					p1.printChoiceCmd(WalkConstants.getPaymentCmd(paymentInCmd - 1));
+					p1.printFreeMsg(WalkConstants.getPaymentCmd(paymentInCmd - 1));
 					int recoverHp = hpUpDownUser(hp);
 					hpCheckUser();
 					p1.printHpUp(recoverHp);
@@ -254,7 +294,7 @@ public class ActionControl {
 					p1.printMoneyDown(money);
 					break;
 				case 2:
-					p1.printChoiceCmd(WalkConstants.getPaymentCmd(paymentInCmd - 1));
+					p1.printFreeMsg(WalkConstants.getPaymentCmd(paymentInCmd - 1));
 					recoverHp = hpUpDownUser(hp);
 					hpCheckUser();
 					p1.printHpUp(recoverHp);
@@ -262,9 +302,9 @@ public class ActionControl {
 					p1.printHappinessDown(recoverHappiness);
 					int num = rand.nextInt(2);
 					if (num == 0) {
-						p1.printChoiceCmd(WalkConstants.ESCAPETRUEMSG);
+						p1.printFreeMsg(WalkConstants.ESCAPETRUEMSG);
 					} else {
-						p1.printChoiceCmd(WalkConstants.ESCAPEFALSEMSG);
+						p1.printFreeMsg(WalkConstants.ESCAPEFALSEMSG);
 						WalkMain.userRow = WalkConstants.PRISONROW;
 						WalkMain.userCol = WalkConstants.PRISONCOL;
 						prisonAction();
@@ -285,7 +325,7 @@ public class ActionControl {
 	void hotelAction() {
 		p1.printCmdMain(WalkConstants.HOTEL,"3");
 		int hotelCmd;
-		Scanner sc = new java.util.Scanner(System.in) ;
+		Scanner sc = new Scanner(System.in) ;
 		try {
 			int hotelInCmd = sc.nextInt();
 			Random rand = new Random();
@@ -298,14 +338,14 @@ public class ActionControl {
 				inputErr();
 				hotelAction();
 			} else {
-				p1.printChoiceCmd(WalkConstants.getHotelCmd(hotelCmd - 1));
+				p1.printFreeMsg(WalkConstants.getHotelCmd(hotelCmd - 1));
 				WalkMain.userRow--;
 			}
 			if (hotelCmd == 1) {
 				if (u1.getMoney() >= 2000) {
 					paymentAction(WalkConstants.HPMAX,-2000,50);
 				} else {
-					p1.printChoiceCmd(WalkConstants.MONEYLOSEMSG);
+					p1.printFreeMsg(WalkConstants.MONEYLOSEMSG);
 				}
 			}
 		} catch (InputMismatchException ex) {
@@ -317,7 +357,7 @@ public class ActionControl {
 	void lotoAction() {
 		p1.printCmdMain(WalkConstants.LOTO,"3");
 		int lotoCmd;
-		Scanner sc = new java.util.Scanner(System.in) ;
+		Scanner sc = new Scanner(System.in) ;
 		try {
 			int lotoInCmd = sc.nextInt();
 			Random rand = new Random();
@@ -330,7 +370,7 @@ public class ActionControl {
 				inputErr();
 				lotoAction();
 			} else {
-				p1.printChoiceCmd(WalkConstants.getLotoCmd(lotoCmd - 1));
+				p1.printFreeMsg(WalkConstants.getLotoCmd(lotoCmd - 1));
 				WalkMain.userRow++;
 			}
 			switch (lotoCmd) {
@@ -354,7 +394,7 @@ public class ActionControl {
 							moneyUpDownUser(1000);
 						}
 					} else {
-						p1.printChoiceCmd(WalkConstants.MONEYLOSEMSG);
+						p1.printFreeMsg(WalkConstants.MONEYLOSEMSG);
 					}
 					break;
 			}
@@ -368,7 +408,7 @@ public class ActionControl {
 	void prisonAction() {
 		p1.printCmdMain(WalkConstants.PRISON,"3");
 		int prisonCmd;
-		Scanner sc = new java.util.Scanner(System.in) ;
+		Scanner sc = new Scanner(System.in) ;
 		try {
 			int prisonInCmd = sc.nextInt();
 			Random rand = new Random();
@@ -381,7 +421,7 @@ public class ActionControl {
 				inputErr();
 				prisonAction();
 			} else {
-				p1.printChoiceCmd(WalkConstants.getPrisonCmd(prisonCmd - 1));
+				p1.printFreeMsg(WalkConstants.getPrisonCmd(prisonCmd - 1));
 			}
 			if (prisonCmd == 1) {
 				p1.printEnding(WalkConstants.ENDINGMSG2,WalkConstants.ENDTITLE2);
